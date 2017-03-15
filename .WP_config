@@ -1,0 +1,51 @@
+#!/bin/bash
+
+###############################################################################
+# Directory dove scrivere la cache
+CACHE_DIR="/tmp/wptool_cache/"
+
+###############################################################################
+# Directory dove effettuare il backup
+ARCHIVE_DIR="../_archive"
+
+###############################################################################
+# Elenco delle directory con permessi www-data
+WRITABLE_DIRS=(
+	"wp-content/uploads/"
+	"wp-content/cache"
+	"wp-content/wfcache"
+	"wp-content/wflogs"
+	"wp-content/plugins/wordfence/tmp"
+	"wp-content/backup*"
+	"wp-content/wp-cache-config.php"
+	"wp-content/w3tc-config"
+	"wp-content/plugins/myweather/cache"
+	"wp-content/themes/*/cache"
+	"sitemap.xml"
+)
+
+###############################################################################
+# Elenco dei plugin da controllare
+PLUGINS=(
+	#"redis-cache"
+	#"nginx-cache"
+	"wp-fail2ban-redux"
+	"wordfence"
+	"theme-check"
+)
+
+###############################################################################
+# Numero di giorni di backup da tenere
+MAX_DAYS=60
+
+
+###############################################################################
+# Configurazioni aggiuntive plugins. %s richiama la directory
+declare -A PLUGIN_SETTINGS
+PLUGIN_SETTINGS["nginx-cache"]="wp option add nginx_cache_path %s/cache; wp option add nginx_auto_purge 1"
+
+###############################################################################
+# Abilitare la cache
+ENABLE_CACHE=1
+
+
